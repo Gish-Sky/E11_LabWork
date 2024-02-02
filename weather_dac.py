@@ -18,3 +18,4 @@ while (time.time()-yeet) < 30:
     print("Start time: " + str(yeet) + ", Current time: " + str(time.time()))
 
     time.sleep(2)
+print("hello")
