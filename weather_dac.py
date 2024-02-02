@@ -19,3 +19,5 @@ while (time.time()-yeet) < 30:
 
     time.sleep(2)
 print("hello")
+
+print("hello")
