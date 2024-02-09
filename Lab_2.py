@@ -7,6 +7,7 @@ Example sketch to connect to PM2.5 sensor with either I2C or UART.
 
 # pylint: disable=unused-import
 import time
+import csv
 import board
 import busio
 # from digitalio import DigitalInOut, Direction, Pull
@@ -46,7 +47,16 @@ pm25 = PM25_UART(uart, reset_pin)
 
 print("Found PM2.5 sensor, reading data...")
 
-while True:
+# This tracks our time and creates a csv
+yeet = time.time()
+#this gives our csv file column names
+meta_data = ["Time", "PM1", "PM2.5", "PM10"] #this is our column value
+#this names the file and sets a standard for when a new line of data is recorded
+file = open("aq_data.csv", "w", newline='')
+#the following creates a new row/creates the file
+writer = csv.writer(file)
+writer.writerow(meta_data)
+while (time.time()-yeet) < 30:
     time.sleep(1)
 
     try:
@@ -77,3 +87,9 @@ while True:
     print("Particles > 5.0um / 0.1L air:", aqdata["particles 50um"])
     print("Particles > 10 um / 0.1L air:", aqdata["particles 100um"])
     print("---------------------------------------")
+    #this records our current time
+    now = time.time()
+    #this records our data into an object
+    data_out = [now, aqdata["pm10 standard"], aqdata['pm25 standard'], aqdata['pm100 standard']]
+    #this adds our data to the csv file we made
+    writer.writerow(data_out)
