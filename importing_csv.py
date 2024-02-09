@@ -7,5 +7,5 @@ writer.writerow(meta_data)
 while True:
     now = time.time()
     data = pm25.read()
-    data_out [now, data["pm 2.5"], data ['pm 10']]
+    data_out = [now, data["pm 2.5"], data ['pm 10']]
     writer.writerow(data_out)
