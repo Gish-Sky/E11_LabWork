@@ -3,8 +3,6 @@ import random
 import time
 import csv
 
-#___________________________________________________________________________________
-
 print(sys.argv)
 
 start_time = time.time()
