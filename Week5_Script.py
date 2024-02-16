@@ -1,52 +1,42 @@
+import adafruit_bme680
+import time
+import board
+import board
+import busio
 import sys
 import random
 import time
 import csv
+import serial
 
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
+#Weather Sensor Data
 
-"""
-Example sketch to connect to PM2.5 sensor with either I2C or UART.
-"""
+# Create sensor object, communicating over the board's default I2C bus
+i2c = board.I2C()   # uses board.SCL and board.SDA
+bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
 
-# pylint: disable=unused-import
-import board
-import busio
-# from digitalio import DigitalInOut, Direction, Pull
-# from adafruit_pm25.i2c import PM25_I2C
+# change this to match the location's pressure (hPa) at sea level
+bme680.sea_level_pressure = 1013.25
+yeet = time.time()
+while (time.time()-yeet) < 30:
+    print("\nTemperature: %0.1f C" % bme680.temperature)
+    print("Gas: %d ohm" % bme680.gas)
+    print("Humidity: %0.1f %%" % bme680.relative_humidity)
+    print("Pressure: %0.3f hPa" % bme680.pressure)
+    print("Altitude = %0.2f meters" % bme680.altitude)
+    print("Start time: " + str(yeet) + ", Current time: " + str(time.time()))
+
+    time.sleep(2)
+#____________________________________________________________________________
+    
+#Air Quality Sensor Data
 
 reset_pin = None
-# If you have a GPIO, its not a bad idea to connect it to the RESET pin
-# reset_pin = DigitalInOut(board.G0)
-# reset_pin.direction = Direction.OUTPUT
-# reset_pin.value = False
 
-
-# For use with a computer running Windows:
-# import serial
-# uart = serial.Serial("COM30", baudrate=9600, timeout=1)
-
-# For use with microcontroller board:
-# (Connect the sensor TX pin to the board/computer RX pin)
-# uart = busio.UART(board.TX, board.RX, baudrate=9600)
-
-# For use with Raspberry Pi/Linux:
-import serial
 uart = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=0.25)
 
-# For use with USB-to-serial cable:
-# import serial
-# uart = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=0.25)
-
-# Connect to a PM2.5 sensor over UART
 from adafruit_pm25.uart import PM25_UART
 pm25 = PM25_UART(uart, reset_pin)
-
-# Create library object, use 'slow' 100KHz frequency!
-#i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
-# Connect to a PM2.5 sensor over I2C
-#pm25 = PM25_I2C(i2c, reset_pin)
 
 print("Found PM2.5 sensor, reading data...")
 
@@ -96,28 +86,3 @@ while (time.time()-yeet) < 30:
     data_out = [now, aqdata["pm10 standard"], aqdata['pm25 standard'], aqdata['pm100 standard']]
     #this adds our data to the csv file we made
     writer.writerow(data_out)
-
-#___________________________________________________________________________________
-
-print(sys.argv)
-
-start_time = time.time()
-run_time = 10
-run_time = int(sys.argv[1])
-
-filename = 'data.csv'
-filename = sys.argv[2]
-file = open(filename, "w", newline = '')
-writer = csv.writer(file)
-
-meta_data = ["Time", "Data"]
-writer.writerow(meta_data)
-
-now = time.time()
-while (now-start_time) < run_time:
-    time.sleep(1)
-    data = random.random()
-    now = time.time()
-    data_list = [now,data]
-    print(data_list)
-    writer.writerow(data_list)
