@@ -30,8 +30,7 @@ while dif<timing:
     timestamp = time.time()
     dif = start-timestamp
     if dif%interval==0:
-        actual_count = counts//interval
-        writer.writerow([actual_count, timestamp])
+        writer.writerow([counts, timestamp])
 
 
 
