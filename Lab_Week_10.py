@@ -3,10 +3,12 @@ import time
 
 counts = 0
 
-def my_callback(channel):
+def my_callback(channel, timing):
     print(f"There was a count detected at {time.time()}" )
     global counts
-    counts = counts + 1
+    while counts<timing:
+        counts = counts + 1
+        print(f"There was a count detected at {time.time()}" )
     
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN)
