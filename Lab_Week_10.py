@@ -1,14 +1,24 @@
 import RPi.GPIO as GPIO
 import time
+import csv
 
 counts = 0
 
-def my_callback(channel, timing):
+def my_callback(channel, timing, interval, filename):
+    filename = '{filename}.csv'
+    filename = sys.argv[2]
+    file = open(filename, "w", newline = '')
+    writer = csv.writer(file)
+    writer.writerow(["Timestamp", "Counts"])
     print(f"There was a count detected at {time.time()}" )
     global counts
     while counts<timing:
         counts = counts + 1
-        print(f"There was a count detected at {time.time()}" )
+        timestamp = time.time()
+        print(f"There was a count detected at", timestamp)
+        if counts%interval==0:
+            actual_count = counts/interval
+            writer.writerow([actual_count, timestamp])
     
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN)
