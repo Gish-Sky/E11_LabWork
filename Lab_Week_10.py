@@ -32,6 +32,7 @@ while dif<timing:
     dif = start-timestamp
     if dif%interval==0:
         writer.writerow([counts, timestamp])
+        
 
 
 
