@@ -4,7 +4,7 @@ import csv
 import sys
 
 counts = 0
-timing = 120
+timing = 15
 interval = 10
 start = time.time()
 dif = 0
@@ -24,14 +24,10 @@ GPIO.setup(17, GPIO.IN)
 GPIO.add_event_detect(17, GPIO.FALLING, callback=my_callback)
 
 while dif<timing:
-    time.sleep(10)  # wait 10 ms to give CPU chance to do other things
+    time.sleep(interval)  # wait 10 ms to give CPU chance to do other things
     print(f"Number of Counts is {counts}")
     timestamp = time.time()
     dif = timestamp-start
-    if dif%interval==0:
-        writer.writerow([counts, timestamp])
+    writer.writerow([counts, timestamp])
 
-
-
-
-
+file.close()
