@@ -27,7 +27,7 @@ while dif<timing:
     time.sleep(10)  # wait 10 ms to give CPU chance to do other things
     print(f"Number of Counts is {counts}")
     timestamp = time.time()
-    dif = start-timestamp
+    dif = timestamp-start
     if dif%interval==0:
         writer.writerow([counts, timestamp])
 
