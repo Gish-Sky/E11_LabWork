@@ -4,7 +4,7 @@ import csv
 import sys
 
 counts = 0
-timing = 15
+timing = 120
 interval = 10
 start = time.time()
 dif = 0
