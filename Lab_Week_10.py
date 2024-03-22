@@ -11,7 +11,7 @@ dif = 0
 filename = "count_dataset"
 
 filename = '{filename}.csv'
-filename = sys.argv[2]
+filename = sys.argv[1]
 file = open(filename, "w", newline = '')
 writer = csv.writer(file)
 writer.writerow(["Timestamp", "Counts"])
@@ -32,7 +32,7 @@ while dif<timing:
     dif = start-timestamp
     if dif%interval==0:
         writer.writerow([counts, timestamp])
-        
+
 
 
 
