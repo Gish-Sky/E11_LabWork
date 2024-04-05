@@ -12,7 +12,7 @@ import RPi.GPIO as GPIO
 
 counts = 0
 timing = 120
-interval = 10
+interval = 2
 start = time.time()
 dif = 0
 
@@ -35,11 +35,8 @@ uart = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=0.25)
 from adafruit_pm25.uart import PM25_UART
 pm25 = PM25_UART(uart, reset_pin)
 
-run_time = 10
-run_time = int(sys.argv[1])
-
 filename = 'data.csv'
-filename = sys.argv[2]
+filename = sys.argv[1]
 file = open(filename, "w", newline = '')
 writer = csv.writer(file)
 
@@ -51,13 +48,12 @@ meta_data = ["Time",
              "Altitude",
              "PM1", 
              "PM2.5", 
-             "PM10"]
+             "PM10",
+             "Counts"]
 writer.writerow(meta_data)
 
 now = start_time #time.time()
-while (now-start_time) < run_time:
-    time.sleep(1)
-    def my_callback(channel):
+def my_callback(channel):
         print(f"There was a count detected at {time.time()}" )
         global counts
         counts=counts+1
@@ -69,6 +65,7 @@ GPIO.add_event_detect(17, GPIO.FALLING, callback=my_callback)
 while dif<timing:
     time.sleep(interval)  # wait 10 ms to give CPU chance to do other things
     print(f"Number of Counts is {counts}")
+    
     timestamp = time.time()
     dif = timestamp-start
     try:
